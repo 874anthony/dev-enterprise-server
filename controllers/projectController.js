@@ -1,6 +1,6 @@
 const Project = require('../models/projectModel');
 
-exports.GetProjectsAll = async (req, res) => {
+exports.getProjectsAll = async (req, res) => {
   try {
     const projects = await Project.find({});
 
@@ -12,11 +12,16 @@ exports.GetProjectsAll = async (req, res) => {
       }
     });
   } catch (error) {
-    console.log('Error', error);
+    res.status(500).json({
+      status: 'fail',
+      data: {
+        error
+      }
+    });
   }
 };
 
-exports.CreateProject = async (req, res) => {
+exports.createProject = async (req, res) => {
   // TODO: Verify if it doesn't exist the req.body
   try {
     const newProject = await Project.create(req.body);
@@ -28,11 +33,16 @@ exports.CreateProject = async (req, res) => {
       }
     });
   } catch (error) {
-    console.log('Error en el servidor:', error);
+    res.status(500).json({
+      status: 'fail',
+      data: {
+        error
+      }
+    });
   }
 };
 
-exports.UpdateProject = async (req, res) => {
+exports.updateProject = async (req, res) => {
   try {
     const project = await Project.findByIdAndUpdate(req.params.id, req.body, {
       runValidators: true,
@@ -46,6 +56,33 @@ exports.UpdateProject = async (req, res) => {
       }
     });
   } catch (error) {
-    console.log(`Throw NEW ERROR: ${error}`);
+    res.status(500).json({
+      status: 'fail',
+      data: {
+        error
+      }
+    });
   }
 };
+
+exports.deleteProject = async (req, res) => {
+  try {
+    await Project.findByIdAndDelete(req.params.id);
+
+    res.status(204).json({
+      status: 'success',
+      data: {
+        message: 'El registro ha sido eliminado exitosamente'
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'fail',
+      data: {
+        error
+      }
+    });
+  }
+};
+
+//TODO: exports.getMonthlyRevenue = async (req, res) => {};

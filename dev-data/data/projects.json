@@ -28,5 +28,20 @@
       "coordinates": [-74.788599, 10.998354],
       "zoneDescription": "Barranquilla, Modelo."
     }
+  },
+  {
+    "projectName": "The CUC University",
+    "priority": "high",
+    "budget": 250000,
+    "summary": "One of the best universities of the decade, showing up their full potential in order to reach the next level. They assume they can be at top of Colombia and in the rest of the world, they can really do it and I'll do my best in order to get there, with my tools and all my equipment, you will not regret it!",
+    "startDate": "2015-02-09",
+    "finishDate": "2017-12-15",
+    "imageCover": "project-cover-3.jpg",
+    "images": ["project-3-1.jpg", "project-3-2.jpg", "project-3-3.jpg"],
+    "location": {
+      "type": "Point",
+      "coordinates": [-74.79124, 10.994912],
+      "zoneDescription": "Barranquilla, BAQ"
+    }
   }
 ]
