@@ -21,8 +21,23 @@ const projectSchema = new mongoose.Schema({
     type: String,
     required: [true, 'A project must have an image cover']
   },
-  images: [String]
+  images: [String],
+  location: {
+    type: {
+      type: String,
+      enum: ['Point'],
+      default: 'Point'
+    },
+    coordinates: [Number],
+    zoneDescription: String
+  }
+  // projectStatus: {
+  //   type: String,
+  //   enum:
+  // }
 });
+
+// PRE-SAVE DOCUMENTS MIDDLEWARES
 
 const Project = mongoose.model('Project', projectSchema);
 
