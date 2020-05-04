@@ -13,7 +13,10 @@ app.use(morgan('dev'));
 
 // Routes
 const projectRouter = require('./routes/projectRoutes');
+const weatherRouter = require('./routes/weatherRoutes');
 
+// Handling the middleware routes
 app.use('/api/v1/projects', projectRouter);
+app.use('/api/v1/weather', weatherRouter);
 
 module.exports = app;
