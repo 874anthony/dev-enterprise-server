@@ -17,6 +17,7 @@ router
 // Normal Routes with parameter
 router
   .route('/:id')
+  .get(projectController.getProject)
   .patch(projectController.updateProject)
   .delete(projectController.deleteProject);
 

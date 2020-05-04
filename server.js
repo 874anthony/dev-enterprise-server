@@ -1,8 +1,8 @@
 // Initilazing server
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-dotenv.config({ path: './config.env' });
 
+dotenv.config({ path: './config.env' });
 const app = require('./app');
 
 const DB = process.env.DB.replace('<PASSWORD>', process.env.DB_PASSWORD);
@@ -12,7 +12,7 @@ mongoose
     useCreateIndex: true,
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false,
+    useFindAndModify: false
   })
   .then(() => console.log('DB connected succesfully!'));
 

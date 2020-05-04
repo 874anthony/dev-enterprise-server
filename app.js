@@ -1,6 +1,10 @@
-// Starting the app
+// 3rd-party packages
 const express = require('express');
 const morgan = require('morgan');
+
+// Own packages
+const AppError = require('./utils/appError');
+const globalErrorHandler = require('./controllers/errorController');
 
 const app = express();
 
@@ -9,7 +13,9 @@ app.use(express.json());
 // Encoding the data sent by the URL. (My own explication)
 app.use(express.urlencoded({ extended: true }));
 // Getting the logs
-app.use(morgan('dev'));
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 
 // Routes
 const projectRouter = require('./routes/projectRoutes');
@@ -18,5 +24,12 @@ const weatherRouter = require('./routes/weatherRoutes');
 // Handling the middleware routes
 app.use('/api/v1/projects', projectRouter);
 app.use('/api/v1/weather', weatherRouter);
+// No routes encountered
+app.all('*', (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} in this server!`, 404));
+});
+
+// Gbloal Error Handling Middleware
+app.use(globalErrorHandler);
 
 module.exports = app;
