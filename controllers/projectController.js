@@ -87,12 +87,33 @@ exports.deleteProject = async (req, res) => {
 
 exports.getMonthlyRevenue = async (req, res) => {
   try {
-    const allProjects = await Project.find({});
+    const { month } = req.params;
+
+    const earnings = await Project.aggregate([
+      {
+        $match: {
+          finishDate: {
+            $gte: new Date(`2020-${month}-01`),
+            $lte: new Date(`2020-${month}-31`)
+          }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalGaining: {
+            $sum: {
+              $divide: [{ $multiply: ['$budget', '$profitPercentage'] }, 100]
+            }
+          }
+        }
+      }
+    ]);
 
     res.status(200).json({
       status: 'success',
       data: {
-        projects: allProjects
+        earnings
       }
     });
   } catch (error) {
