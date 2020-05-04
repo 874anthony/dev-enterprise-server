@@ -5,8 +5,9 @@
     "budget": 120000,
     "summary": "A long term contract with 'Green House' constructor in order to make the the bridge comfortable, secure, and we are going to do it with love, also we are specifying the materials that are going to be used in order to fill our needs, in fact, we are making real progress to bring Barranquilla one of the most exciting diversions to that city, I hope people there really enjoy our work!",
     "startDate": "2019-08-09",
-    "finishDate": "2021-11-12",
+    "finishDate": "2020-11-12",
     "imageCover": "project-cover-1.jpg",
+    "profitPercentage": "30",
     "images": ["project-1-1.jpg", "project-1-2.jpg", "project-1-3.jpg"],
     "location": {
       "type": "Point",
@@ -20,13 +21,30 @@
     "budget": 50000,
     "summary": "A long term contract with 'Davivienda' constructor in order to make the the good stadium with so many lights, bringing up the best of our players in order to them to be skilled.",
     "startDate": "2020-08-19",
-    "finishDate": "2022-07-26",
+    "finishDate": "2020-07-26",
     "imageCover": "project-cover-2.jpg",
+    "profitPercentage": "45",
     "images": ["project-2-1.jpg", "project-2-2.jpg", "project-2-3.jpg"],
     "location": {
       "type": "Point",
       "coordinates": [-74.788599, 10.998354],
       "zoneDescription": "Barranquilla, Modelo."
+    }
+  },
+  {
+    "projectName": "The CUC University",
+    "priority": "high",
+    "budget": 250000,
+    "summary": "One of the best universities of the decade, showing up their full potential in order to reach the next level. They assume they can be at top of Colombia and in the rest of the world, they can really do it and I'll do my best in order to get there, with my tools and all my equipment, you will not regret it!",
+    "startDate": "2015-02-09",
+    "finishDate": "2020-12-15",
+    "imageCover": "project-cover-3.jpg",
+    "profitPercentage": "25",
+    "images": ["project-3-1.jpg", "project-3-2.jpg", "project-3-3.jpg"],
+    "location": {
+      "type": "Point",
+      "coordinates": [-74.79124, 10.994912],
+      "zoneDescription": "Barranquilla, BAQ"
     }
   }
 ]

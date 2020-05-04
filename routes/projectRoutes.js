@@ -4,10 +4,17 @@ const projectController = require('../controllers/projectController');
 const router = exprees.Router();
 
 router
-  .route('/')
-  .get(projectController.GetProjectsAll)
-  .post(projectController.CreateProject);
+  .route('/monthly-revenue/:month')
+  .get(projectController.getMonthlyRevenue);
 
-router.route('/:id').patch(projectController.UpdateProject);
+router
+  .route('/')
+  .get(projectController.getProjectsAll)
+  .post(projectController.createProject);
+
+router
+  .route('/:id')
+  .patch(projectController.updateProject)
+  .delete(projectController.deleteProject);
 
 module.exports = router;
