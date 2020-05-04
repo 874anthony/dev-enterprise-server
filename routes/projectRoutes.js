@@ -3,8 +3,9 @@ const projectController = require('../controllers/projectController');
 
 const router = exprees.Router();
 
-// router
-// .route('/monthly-revenue/:month')
+router
+  .route('/monthly-revenue/:month')
+  .get(projectController.getMonthlyRevenue);
 
 router
   .route('/')

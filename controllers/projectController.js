@@ -85,4 +85,22 @@ exports.deleteProject = async (req, res) => {
   }
 };
 
-//TODO: exports.getMonthlyRevenue = async (req, res) => {};
+exports.getMonthlyRevenue = async (req, res) => {
+  try {
+    const allProjects = await Project.find({});
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        projects: allProjects
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'fail',
+      data: {
+        error
+      }
+    });
+  }
+};

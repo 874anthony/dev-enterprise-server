@@ -17,6 +17,13 @@ const projectSchema = new mongoose.Schema({
     required: [true, 'You must specify the amount needed'],
     min: [20000, 'The minimun value should be at least 20000']
   },
+  profitPercentage: {
+    type: Number,
+    min: 10,
+    max: 100,
+    default: 10,
+    required: [true, 'You must indicate the revenue value for the enterprise']
+  },
   summary: {
     type: String,
     trim: true
