@@ -36,6 +36,11 @@ const userSchema = new mongoose.Schema({
   country: {
     type: String,
     required: [true, 'Please, tell us where are you from'],
+    validate: [validator.isAlpha, 'Please, the country must contain letters']
+  },
+  city: {
+    type: String,
+    required: [true, 'Please, tell us your city'],
     validate: [validator.isAlpha, 'Please, the country must contain letters'],
     lowercase: true
   },

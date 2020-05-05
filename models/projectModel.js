@@ -23,7 +23,7 @@ const projectSchema = new mongoose.Schema({
     type: Number,
     min: 10,
     max: 100,
-    default: 10,
+    default: 20,
     required: [true, 'You must indicate the revenue value for the enterprise']
   },
   summary: {

@@ -20,10 +20,12 @@ if (process.env.NODE_ENV === 'development') {
 // Routes
 const projectRouter = require('./routes/projectRoutes');
 const weatherRouter = require('./routes/weatherRoutes');
+const userRouter = require('./routes/userRoutes');
 
 // Handling the middleware routes
 app.use('/api/v1/projects', projectRouter);
 app.use('/api/v1/weather', weatherRouter);
+app.use('/api/v1/users', userRouter);
 // No routes encountered
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} in this server!`, 404));
