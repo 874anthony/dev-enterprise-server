@@ -1,11 +1,13 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const projectSchema = new mongoose.Schema({
   projectName: {
     type: String,
     required: [true, 'A project must have a name'],
     minlength: [10, 'A project must have at least 10 characters'],
-    unique: true
+    unique: true,
+    validate: [validator.isAlpha, 'Project name must only have characters']
   },
   priority: {
     type: String,

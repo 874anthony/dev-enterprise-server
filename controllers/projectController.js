@@ -1,95 +1,17 @@
 const Project = require('../models/projectModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const Factory = require('./handlerFactory');
 
-exports.getProjectsAll = catchAsync(async (req, res, next) => {
-  const projects = await Project.find({});
+// From the handler
+exports.getProjectsAll = Factory.getAll(Project);
+exports.getProject = Factory.getOne(Project);
 
-  res.status(200).json({
-    status: 'success',
-    total: projects.length,
-    data: {
-      projects
-    }
-  });
-});
+exports.createProject = Factory.createOne(Project);
+exports.updateProject = Factory.updateOne(Project);
+exports.deleteProject = Factory.deleteOne(Project);
 
-exports.getProject = catchAsync(async (req, res, next) => {
-  const { id } = req.params;
-  const project = await Project.findById(id);
-
-  if (!project) {
-    return next(
-      new AppError(
-        'No project was found for that ID, please try with another',
-        404
-      )
-    );
-  }
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      project
-    }
-  });
-});
-
-exports.createProject = catchAsync(async (req, res, next) => {
-  // TODO: Verify if it doesn't exist the req.body
-  const newProject = await Project.create(req.body);
-
-  res.status(201).json({
-    status: 'success',
-    data: {
-      project: newProject
-    }
-  });
-});
-
-exports.updateProject = catchAsync(async (req, res, next) => {
-  const project = await Project.findByIdAndUpdate(req.params.id, req.body, {
-    runValidators: true,
-    new: true
-  });
-
-  if (!project) {
-    return next(
-      new AppError(
-        'No project was found for that ID, please try with another',
-        404
-      )
-    );
-  }
-
-  res.status(202).json({
-    status: 'success',
-    data: {
-      project
-    }
-  });
-});
-
-exports.deleteProject = catchAsync(async (req, res, next) => {
-  const project = await Project.findByIdAndDelete(req.params.id);
-
-  if (!project) {
-    return next(
-      new AppError(
-        'No project was found for that ID, please try with another',
-        404
-      )
-    );
-  }
-
-  res.status(204).json({
-    status: 'success',
-    data: {
-      message: 'It was deleted successfully!'
-    }
-  });
-});
-
+// Personalized
 exports.getMonthlyRevenue = catchAsync(async (req, res, next) => {
   const { month } = req.params;
 
