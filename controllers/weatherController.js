@@ -6,10 +6,8 @@ const getWeather = async city => {
   return weather.data;
 };
 
-// TODO: Verificar si puedo corregir el tema del query en el city name (Read Documentation)
-
 exports.getWeatherByName = async (req, res) => {
-  const { city } = req.params;
+  const { city } = req.user;
 
   try {
     const weather = await getWeather(city);

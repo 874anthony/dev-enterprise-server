@@ -42,8 +42,10 @@ exports.updateOne = Model =>
 
 exports.createOne = Model =>
   catchAsync(async (req, res, next) => {
-    // TODO: Verify if it doesn't exist the req.body
-    const newDocument = await Model.create(req.body);
+    const body = { ...req.body };
+    body.user = req.user._id;
+
+    const newDocument = await Model.create(body);
 
     if (!newDocument) {
       return next(new AppError('We have an error, please try again', 500));
@@ -76,9 +78,14 @@ exports.getOne = Model =>
     });
   });
 
-exports.getAll = Model =>
+//TODO: Globalize the controller adding some extra stuff
+exports.getAll = (Model, populateOptions) =>
   catchAsync(async (req, res, next) => {
-    const documents = await Model.find({});
+    let filter = {};
+    if (req.params.userId) filter = { user: req.params.userId };
+
+    const query = Model.find(filter).populate(populateOptions);
+    const documents = await query;
 
     res.status(200).json({
       status: 'success',

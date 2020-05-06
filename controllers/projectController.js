@@ -3,27 +3,6 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const Factory = require('./handlerFactory');
 
-exports.createProject = catchAsync(async (req, res, next) => {
-  const project = await Project.create({
-    projectName: req.body.projectName,
-    budget: req.body.budget,
-    profitPercentage: req.body.profitPercentage,
-    summary: req.body.summary,
-    startDate: req.body.startDate,
-    finishDate: req.body.finishDate,
-    location: req.body.location,
-    user: req.user._id
-  });
-
-  res.status(200).json({
-    status: 'success',
-    message: 'Your tour now is on the list of waiting',
-    data: {
-      project
-    }
-  });
-});
-
 // Personalized
 exports.getMonthlyRevenue = catchAsync(async (req, res, next) => {
   const { month } = req.params;
@@ -64,7 +43,11 @@ exports.getMonthlyRevenue = catchAsync(async (req, res, next) => {
 });
 
 // From the handler
-exports.getProjectsAll = Factory.getAll(Project);
 exports.getProject = Factory.getOne(Project);
+exports.getProjectsAll = Factory.getAll(Project, {
+  path: 'user',
+  select: 'role name email'
+});
+exports.createProject = Factory.createOne(Project);
 exports.updateProject = Factory.updateOne(Project);
 exports.deleteProject = Factory.deleteOne(Project);

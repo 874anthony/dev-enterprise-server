@@ -1,8 +1,9 @@
 const express = require('express');
+// Controllers
 const projectController = require('../controllers/projectController');
 const authController = require('../controllers/authController');
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 // Needs to be logged in
 router.use(authController.isLogged);
@@ -15,10 +16,7 @@ router
 // Normal Routes
 router
   .route('/')
-  .get(
-    authController.validRoles('admin', 'project-manager'),
-    projectController.getProjectsAll
-  )
+  .get(projectController.getProjectsAll)
   .post(projectController.createProject);
 
 // Normal Routes with parameter
