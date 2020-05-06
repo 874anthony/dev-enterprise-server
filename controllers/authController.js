@@ -82,3 +82,17 @@ exports.isLogged = catchAsync(async (req, res, next) => {
   req.user = currentUser;
   next();
 });
+
+exports.validRoles = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new AppError('You do not have permission to access here.', 403)
+      );
+    }
+    next();
+  };
+};
+
+// TODO: Reset the passwords and the changed iat
+// exports.resetPassword = catchAsync(async (req, res, next) => {});

@@ -1,13 +1,12 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
 
 const projectSchema = new mongoose.Schema({
   projectName: {
     type: String,
     required: [true, 'A project must have a name'],
     minlength: [10, 'A project must have at least 10 characters'],
-    unique: true,
-    validate: [validator.isAlpha, 'Project name must only have characters']
+    maxlength: [25, "A project can't exceed the 25 characters"],
+    unique: true
   },
   priority: {
     type: String,
@@ -28,13 +27,20 @@ const projectSchema = new mongoose.Schema({
   },
   summary: {
     type: String,
-    trim: true
+    trim: true,
+    required: [true, 'You must specify details about the project']
   },
-  startDate: Date,
-  finishDate: Date,
+  startDate: {
+    type: Date,
+    required: [true, 'A tour must have a date of start']
+  },
+  finishDate: {
+    type: Date,
+    required: [true, 'A tour must have a date of finish']
+  },
   imageCover: {
     type: String,
-    required: [true, 'A project must have an image cover']
+    default: 'default.jpg'
   },
   images: [String],
   location: {
@@ -61,6 +67,20 @@ const projectSchema = new mongoose.Schema({
     required: [true, 'A project must have an user']
   }
 });
+
+// POST MIDDLEWARES
+// DOCUMENT MIDDLEWARES
+// - Populating the field of user
+projectSchema.post('save', async function(doc, next) {
+  await doc
+    .populate({
+      path: 'user',
+      select: 'role name email'
+    })
+    .execPopulate();
+});
+
+//////////////////////////////////////////////////////
 
 // PRE MIDDLEWARES
 // QUERY MIDDLEWARES
