@@ -14,6 +14,10 @@ const handleDuplicateFieldsDB = err => {
   return new AppError(message, 400);
 };
 
+const handleJWTError = () => {
+  return new AppError('The token is invalid, please try again', 401);
+};
+
 const sendErrorProduction = (err, res) => {
   // Operational error created by us
 
@@ -58,6 +62,8 @@ module.exports = (err, req, res, next) => {
     if (error.name === 'CastError') error = handleCastErrorDB(error);
     // DUPLICATE FIELDS
     if (error.code === 11000) error = handleDuplicateFieldsDB(error);
+    // JWT INVALID TOKEN
+    if (error.name === 'JsonWebTokenError') error = handleJWTError();
 
     sendErrorProduction(error, res);
   }

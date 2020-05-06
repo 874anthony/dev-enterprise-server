@@ -54,6 +54,11 @@ const projectSchema = new mongoose.Schema({
   updatedAt: {
     type: Date,
     default: undefined
+  },
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: [true, 'A project must have an user']
   }
 });
 

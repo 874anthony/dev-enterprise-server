@@ -71,7 +71,7 @@ exports.isLogged = catchAsync(async (req, res, next) => {
   );
 
   // Check if the user exists
-  const currentUser = User.findById(decoded.id);
+  const currentUser = await User.findById(decoded.id);
 
   if (!currentUser) {
     return next(
@@ -79,5 +79,6 @@ exports.isLogged = catchAsync(async (req, res, next) => {
     );
   }
 
+  req.user = currentUser;
   next();
 });

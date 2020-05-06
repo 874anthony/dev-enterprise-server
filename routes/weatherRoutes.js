@@ -4,8 +4,11 @@ const authController = require('../controllers/authController');
 
 const router = express.Router();
 
+// Needs to be logged first
+router.use(authController.isLogged);
+
 router
   .route('/get-current-weather/:city')
-  .get(authController.isLogged, weatherController.getWeatherByName);
+  .get(weatherController.getWeatherByName);
 
 module.exports = router;
