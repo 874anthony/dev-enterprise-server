@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -12,6 +13,14 @@ const userSchema = new mongoose.Schema({
     unique: true,
     lowercase: true,
     validate: [validator.isEmail, 'Please, provide us a valid email']
+  },
+  role: {
+    type: String,
+    enum: {
+      values: ['user', 'admin', 'project-manager'],
+      message: "You can't be this role: {PATH}"
+    },
+    default: 'user'
   },
   photo: {
     type: String,
@@ -55,6 +64,23 @@ const userSchema = new mongoose.Schema({
     maxlength: [100, 'You must not pass 100 characters']
   }
 });
+
+// PRE MIDDLEWARES
+// DOCUMENT MIDDLEWARES
+// - Hashing the passwords
+userSchema.pre('save', async function(next) {
+  this.password = await bcrypt.hash(this.password, 12);
+  this.passwordConfirm = undefined;
+  next();
+});
+
+// MÉTHODS
+userSchema.methods.correctPassword = async function(
+  currentPassword,
+  userPassword
+) {
+  return await bcrypt.compare(currentPassword, userPassword);
+};
 
 const User = mongoose.model('User', userSchema);
 
