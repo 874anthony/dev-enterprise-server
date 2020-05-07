@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
 const catchAsync = require('../utils/catchAsync');
@@ -95,4 +96,33 @@ exports.validRoles = (...roles) => {
 };
 
 // TODO: Reset the passwords and the changed iat
-// exports.resetPassword = catchAsync(async (req, res, next) => {});
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return next(new AppError("There's not user with this current email", 404));
+  }
+
+  // 2) Send him the token to reset
+  const resetToken = user.createPasswordToken();
+  user.save({ validateBeforeSave: false });
+
+  res.status(200).json({
+    status: 'success',
+    message: 'Go to /resetPassword with the token to reset your password',
+    token: resetToken
+  });
+});
+
+exports.resetPassword = catchAsync(async (req, res, next) => {
+  const resetToken = crypto
+    .createHash('sha256')
+    .update(req.params.resetToken)
+    .digest('hex');
+
+  const user = await User.find({
+    resetPasswordToken: resetToken,
+    resetPasswordExpires: { $gt: Date.now() }
+  });
+});
