@@ -14,7 +14,7 @@ router.use('/:userId/projects', projectRouter);
 router.route('/signUp').post(authController.signUp);
 router.route('/login').post(authController.logIn);
 router.route('/forgotPassword').post(authController.forgotPassword);
-router.route('/resetPassword/:resetToken').post(authController.resetPassword);
+// router.route('/resetPassword/:resetToken').post(authController.resetPassword);
 
 // Handling the users
 router.route('/').post(userController.createUser);

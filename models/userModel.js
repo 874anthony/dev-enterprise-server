@@ -72,8 +72,11 @@ const userSchema = new mongoose.Schema({
 // DOCUMENT MIDDLEWARES
 // - Hashing the passwords
 userSchema.pre('save', async function(next) {
+  if (!this.isModified('password')) return next();
+
   this.password = await bcrypt.hash(this.password, 12);
   this.passwordConfirm = undefined;
+
   next();
 });
 
@@ -93,7 +96,7 @@ userSchema.methods.createPasswordToken = function() {
     .update(resetToken)
     .digest('hex');
 
-  this.resetPasswordExpires = new Date.now() + 10 * 60 * 1000;
+  this.resetPasswordExpires = Date.now() + 10 * 60 * 1000;
 
   return resetToken;
 };
