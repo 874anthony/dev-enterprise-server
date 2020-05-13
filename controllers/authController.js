@@ -1,5 +1,6 @@
 // const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 const { promisify } = require('util');
 const catchAsync = require('../utils/catchAsync');
 const User = require('../models/userModel');
@@ -107,6 +108,22 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   // 2) Send him the token to reset
   const resetToken = user.createPasswordToken();
   await user.save({ validateBeforeSave: false });
+
+  const transporter = nodemailer.createTransport({
+    host: process.env.SENDGRID_SERVER,
+    port: process.env.SENDGRID_PORT,
+    auth: {
+      user: process.env.SENDGRID_USERNAME,
+      pass: process.env.SENDGRID_PASSWORD
+    }
+  });
+
+  // let info = await transporter.sendMail({
+  // from: "Anthony Acosta, CEO <<aacosta27@cuc.edu.co>",
+  // to: user.email,
+  // subject: 'You want to recover your password? <10 minutes maximum>',
+  // html:
+  // })
 
   res.status(200).json({
     status: 'success',
