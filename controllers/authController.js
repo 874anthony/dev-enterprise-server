@@ -1,10 +1,10 @@
 // const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
 const { promisify } = require('util');
 const catchAsync = require('../utils/catchAsync');
 const User = require('../models/userModel');
 const AppError = require('../utils/appError');
+const Email = require('../utils/email');
 
 const signToken = id => {
   return jwt.sign({ id }, process.env.JWT_SECRET_KEY, {
@@ -27,7 +27,7 @@ const createSendToken = (user, statusCode, res) => {
 
 exports.signUp = catchAsync(async (req, res, next) => {
   const newUser = await User.create(req.body);
-
+  // TODO: Send email of welcome
   createSendToken(newUser, 201, res);
 });
 
@@ -109,27 +109,30 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   const resetToken = user.createPasswordToken();
   await user.save({ validateBeforeSave: false });
 
-  const transporter = nodemailer.createTransport({
-    host: process.env.SENDGRID_SERVER,
-    port: process.env.SENDGRID_PORT,
-    auth: {
-      user: process.env.SENDGRID_USERNAME,
-      pass: process.env.SENDGRID_PASSWORD
-    }
-  });
+  // 3) Send the actual email
 
-  // let info = await transporter.sendMail({
-  // from: "Anthony Acosta, CEO <<aacosta27@cuc.edu.co>",
-  // to: user.email,
-  // subject: 'You want to recover your password? <10 minutes maximum>',
-  // html:
-  // })
+  try {
+    const resetURL = `${req.protocol}://${req.get(
+      'host'
+    )}/api/v1/users/resetPassword/${resetToken}`;
 
-  res.status(200).json({
-    status: 'success',
-    message: 'Go to /resetPassword with the token to reset your password',
-    token: resetToken
-  });
+    // Sending the email
+    await new Email(user, resetURL).sendPasswordReset();
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Token sent to the email'
+    });
+  } catch (error) {
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save({ validateBeforeSave: false });
+
+    return next(
+      new AppError('There was an error sending the email. Try again later!'),
+      500
+    );
+  }
 });
 
 // TODO: Finish the resetPassword
