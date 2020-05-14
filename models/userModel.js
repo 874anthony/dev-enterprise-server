@@ -51,9 +51,8 @@ const userSchema = new mongoose.Schema({
   city: {
     type: String,
     required: [true, 'Please, tell us your city'],
-    // TODO: Change this validator
-    validate: [validator.isAlpha, 'Please, the city must contain letters'],
-    lowercase: true
+    lowercase: true,
+    trim: true
   },
   phoneNumber: {
     type: String,

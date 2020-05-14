@@ -1,5 +1,9 @@
-// const crypto = require('crypto');
 const crypto = require('crypto');
+// Testing sending message
+const client = require('twilio')(
+  process.env.TWILIO_ACCOUNTSID,
+  process.env.TWILIO_AUTHTOKEN
+);
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const catchAsync = require('../utils/catchAsync');
@@ -10,6 +14,14 @@ const Email = require('../utils/email');
 const signToken = id => {
   return jwt.sign({ id }, process.env.JWT_SECRET_KEY, {
     expiresIn: process.env.JWT_EXPIRES_IN
+  });
+};
+
+const sendTextMessage = async (body, to) => {
+  await client.messages.create({
+    body,
+    from: `+${process.env.TWILIO_FROM}`,
+    to: `+57${to}`
   });
 };
 
@@ -146,7 +158,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   const user = await User.findOne({
     resetPasswordToken: hashedToken,
     resetPasswordExpires: { $gt: Date.now() }
-  });
+  }).select('+phoneNumber');
 
   // 2) If token has not expired, and there is user, set the new password
   if (!user) {
@@ -159,7 +171,10 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   user.passwordResetExpires = undefined;
   await user.save();
 
+  // 3) Sending the message
+  const bodyMessage =
+    "You succesfully changed your password, if it wasn't you, please contact support!";
+  await sendTextMessage(bodyMessage, user.phoneNumber);
+
   createSendToken(user, 200, res);
 });
-
-// TODO: Send phone verification
