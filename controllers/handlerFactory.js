@@ -78,7 +78,6 @@ exports.getOne = Model =>
     });
   });
 
-//TODO: Globalize the controller adding some extra stuff
 exports.getAll = (Model, populateOptions) =>
   catchAsync(async (req, res, next) => {
     let filter = {};

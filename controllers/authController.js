@@ -97,7 +97,6 @@ exports.validRoles = (...roles) => {
   };
 };
 
-// TODO: FINISH
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
@@ -136,31 +135,31 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   }
 });
 
-// TODO: Finish the resetPassword
-// exports.resetPassword = catchAsync(async (req, res, next) => {
-//   const { resetToken } = req.params;
+exports.resetPassword = catchAsync(async (req, res, next) => {
+  const { resetToken } = req.params;
 
-//   const hashedToken = crypto
-//     .createHash('sha256')
-//     .update(resetToken)
-//     .digest('hex');
+  const hashedToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
 
-//   const user = await User.find({
-//     resetPasswordToken: hashedToken,
-//     resetPasswordExpires: { $gt: Date.now() }
-//   });
+  const user = await User.findOne({
+    resetPasswordToken: hashedToken,
+    resetPasswordExpires: { $gt: Date.now() }
+  });
 
-//   // 2) If token has not expired, and there is user, set the new password
-//   if (!user) {
-//     return next(new AppError('Token is invalid or has expired', 400));
-//   }
+  // 2) If token has not expired, and there is user, set the new password
+  if (!user) {
+    return next(new AppError('Token is invalid or has expired', 400));
+  }
 
-//   user.password = req.body.password;
-//   user.passwordConfirm = req.body.passwordConfirm;
-//   user.passwordResetToken = undefined;
-//   user.passwordResetExpires = undefined;
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  user.passwordResetToken = undefined;
+  user.passwordResetExpires = undefined;
+  await user.save();
 
-//   TODO: Confirm if the passwords are the same
-//   if (user.)
-//   await user.save();
-// });
+  createSendToken(user, 200, res);
+});
+
+// TODO: Send phone verification
