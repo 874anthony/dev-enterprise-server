@@ -116,7 +116,6 @@ exports.ProjectsWithin = catchAsync(async (req, res, next) => {
 
 // From the handler
 exports.getProject = Factory.getOne(Project);
-// TODO: Create pagination
 exports.getProjectsAll = Factory.getAll(Project, {
   path: 'user',
   select: 'role name email'
