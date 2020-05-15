@@ -15,13 +15,16 @@ router
   .route('/monthly-revenue/:month')
   .get(authController.validRoles('admin'), projectController.getMonthlyRevenue);
 
+router
+  .route('/projects-within/:distance/center/:latlng/unit/:unit')
+  .get(projectController.ProjectsWithin);
+
 // Normal Routes
 router
   .route('/')
   .get(projectController.getProjectsAll)
   .post(projectController.createProject);
 
-// Normal Routes with parameter
 router
   .route('/:id')
   .get(

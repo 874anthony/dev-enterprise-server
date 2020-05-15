@@ -40,7 +40,6 @@ const createSendToken = (user, statusCode, res) => {
 
 exports.signUp = catchAsync(async (req, res, next) => {
   const newUser = await User.create(req.body);
-  // TODO: Send email of welcome
   createSendToken(newUser, 201, res);
 });
 

@@ -68,6 +68,9 @@ const projectSchema = new mongoose.Schema({
   }
 });
 
+// INDEXES
+projectSchema.index({ location: '2dsphere' });
+
 // POST MIDDLEWARES
 // DOCUMENT MIDDLEWARES
 // - Populating the field of user
