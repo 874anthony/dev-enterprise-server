@@ -21,6 +21,15 @@ exports.deleteOne = Model =>
 
 exports.updateOne = Model =>
   catchAsync(async (req, res, next) => {
+    if (req.file) {
+      req.body.imageCover = req.file.filename;
+    } else if (req.files) {
+      req.body.imageCover = req.files.imageCover[0].filename;
+      req.body.images = [];
+
+      req.files.images.forEach(file => req.body.images.push(file.filename));
+    }
+
     const document = await Model.findByIdAndUpdate(req.params.id, req.body, {
       runValidators: true,
       new: true

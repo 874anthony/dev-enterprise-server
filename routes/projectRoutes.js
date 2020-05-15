@@ -8,6 +8,8 @@ const router = express.Router({ mergeParams: true });
 // Needs to be logged in
 router.use(authController.isLogged);
 
+// Create and endpoint for nearest projects
+
 // Personalized routes
 router
   .route('/monthly-revenue/:month')
@@ -26,7 +28,7 @@ router
     authController.validRoles('admin', 'project-manager'),
     projectController.getProject
   )
-  .patch(projectController.updateProject)
+  .patch(projectController.updateProjectImages, projectController.updateProject)
   .delete(
     authController.validRoles('admin', 'project-manager'),
     projectController.deleteProject
